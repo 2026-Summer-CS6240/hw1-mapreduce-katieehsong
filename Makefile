@@ -15,7 +15,7 @@ hdfs.output=output
 # AWS EMR Execution
 aws.emr.release=emr-6.10.0
 aws.region=us-east-1
-aws.bucket.name=cs6240-demo-bucket
+aws.bucket.name=cs6240-katie-hw1-hadoop
 aws.subnet.id=subnet-6356553a
 aws.input=input
 aws.output=output
@@ -95,7 +95,7 @@ pseudoq: jar clean-local-output clean-hdfs-output
 
 # Create S3 bucket.
 make-bucket:
-	aws s3 mb s3://${aws.bucket.name}
+	aws s3 mb s3://${aws.bucket.name} --region ${aws.region}
 
 # Upload data to S3 input dir.
 upload-input-aws: make-bucket
@@ -121,6 +121,7 @@ aws: jar upload-app-aws delete-output-aws
 		--configurations '[{"Classification": "hadoop-env", "Configurations": [{"Classification": "export","Configurations": [],"Properties": {"JAVA_HOME": "/usr/lib/jvm/java-11-amazon-corretto.x86_64"}}],"Properties": {}}]' \
 		--use-default-roles \
 		--enable-debugging \
+		--region ${aws.region} \
 		--auto-terminate
 
 # Download output from S3.
